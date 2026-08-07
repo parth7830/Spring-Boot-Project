@@ -1,32 +1,69 @@
 package com.JIIT.journalApp.services;
 
-import com.JIIT.journalApp.entity.JournalEntry;
+import com.JIIT.journalApp.controller.JournalEntryControllerv2;
 import com.JIIT.journalApp.entity.User;
 import com.JIIT.journalApp.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-@Component
+@Service
+
 public class UserService {
+
     @Autowired
     private UserRepository userRepository;
-    public void saveEntry(User user){
+
+    private static final PasswordEncoder passwordEncoder
+            = new BCryptPasswordEncoder();
+
+    public boolean saveEntry(User user) {
+        try {
+            user.setPassword(
+                    passwordEncoder.encode(user.getPassword())
+            );
+            user.setRoles(Arrays.asList("USER"));
+            userRepository.save(user);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+
+    public void saveAdmin(User user) {
+        user.setPassword(
+                passwordEncoder.encode(user.getPassword())
+        );
+        user.setRoles(Arrays.asList("USER", "ADMIN"));
         userRepository.save(user);
     }
-    public List<User> getAll(){
+
+    public void saveUser(User user) {
+        userRepository.save(user);
+    }
+
+    public List<User> getAll() {
         return userRepository.findAll();
     }
-    public Optional<User> findById(ObjectId id){
+
+    public Optional<User> findById(ObjectId id) {
         return userRepository.findById(id);
     }
-    public void deleteById(ObjectId id){
+
+    public void deleteById(ObjectId id) {
         userRepository.deleteById(id);
     }
-    public User findByUserName(String userName){
+
+    public User findByUserName(String userName) {
         return userRepository.findByUserName(userName);
     }
 }

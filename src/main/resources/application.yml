@@ -1,0 +1,41 @@
+spring:
+  application:
+    name: journalApp
+  main:
+    allow-bean-definition-overriding: true
+  data:
+    mongodb:
+      uri: mongodb+srv://shparthhome_db_user:0jSlId6NxiGmMwkz@cluster0.jhr7xa2.mongodb.net/?appName=Cluster0
+      database: journaldb
+      auto-index-creation: true
+    redis:
+      host: localhost
+      port: 6379
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: parthkartik125@gmail.com
+    password: rhhu yckb itvg igzv
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+app:
+  mail:
+    from: email@gmail.com
+
+server:
+  port: 8080
+  servlet:
+    context-path: /journal
+
+jwt:
+  secret: mySecretKey1234567890abcdefghijklmnopqrstuvwxyz
+  expiration: 86400000
+
+weather:
+  api:
+    key: 301dc337f4af4604810b981e39ee9779
